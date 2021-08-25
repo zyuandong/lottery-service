@@ -123,7 +123,10 @@ const sql = {
     return new Promise((resolve, reject) => {
       runSql(
         str,
-        (res) => resolve(res),
+        (res) => resolve({
+          ...baseRes,
+          // data: res
+        }),
         (err) => reject(err)
       );
     });

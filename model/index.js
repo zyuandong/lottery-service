@@ -41,7 +41,7 @@ const tables = {
   `
 };
 
-const oid = uuidv5('admin', uuidv5.DNS);
+const oid = uuidv5('admin_123456', uuidv5.DNS);
 const adminSql = `
   INSERT INTO user 
   (oid, name, password, is_admin, create_time) values 
