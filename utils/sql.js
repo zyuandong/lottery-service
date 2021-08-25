@@ -1,4 +1,9 @@
-const runSql = require("./runSql");
+const runSql = require('./runSql');
+
+const baseRes = {
+  code: 200,
+  msg: 'success',
+};
 
 function getByPage(tableName, filter) {
   // select * from tableName limit (page - 1) * pageSize, pageSize;
@@ -13,7 +18,7 @@ function getByPage(tableName, filter) {
       (res) => {
         let data = {
           code: 200,
-          message: "获取成功",
+          message: '获取成功',
           data: {
             metadata: {
               paginationParam: {
@@ -28,7 +33,7 @@ function getByPage(tableName, filter) {
         runSql(
           `select count(id) from ${tableName}`,
           (res) => {
-            data.data.metadata.paginationParam.total = res[0]["count(id)"];
+            data.data.metadata.paginationParam.total = res[0]['count(id)'];
             resolve(data);
           },
           (err) => reject(err)
@@ -40,10 +45,41 @@ function getByPage(tableName, filter) {
 }
 
 const sql = {
+  // select * from tableName where fields.item = 'xxx';
+  queryByFields: (tableName, fields) => {
+    let whereSql = '';
+
+    if (fields && Object.keys(fields).length) {
+      Object.keys(fields).forEach((key, i) => {
+        whereSql +=
+          i === 0
+            ? `${key} = '${fields[key]}'`
+            : ` && ${key} = '${fields[key]}'`;
+      });
+    } else {
+      return {
+        code: 500,
+        msg: 'Fields is error',
+      };
+    }
+
+    return new Promise((resolve, reject) => {
+      let str = `select * from ${tableName} where ${whereSql}`;
+      runSql(
+        str,
+        (res) =>
+          resolve({
+            ...baseRes,
+            data: res,
+          }),
+        (err) => reject(err)
+      );
+    });
+  },
+
+  // select * from tableName;
   queryAll: (tableName, filter) => {
-    // select * from tableName;
     if (filter && Object.keys(filter).length) {
-      console.log("== filter ==", filter);
       return getByPage(tableName, filter);
     }
     return new Promise((resolve, reject) => {
@@ -55,8 +91,9 @@ const sql = {
       );
     });
   },
+
+  // select * from tableName where key=value;
   queryById: (tableName, id) => {
-    // select * from tableName where key=value;
     return new Promise((resolve, reject) => {
       let str = `select * from ${tableName} where id=${id}`;
       runSql(
@@ -66,24 +103,22 @@ const sql = {
       );
     });
   },
+
+  // insert inti tableName (xx, yy, zz) values ("xx", yy, zz);
   insert: (tableName, data) => {
-    // insert inti tableName (xx, yy, zz) values ("xx", yy, zz);
-    // console.log(tableName, data, typeof data);
     let keys = [],
       values = [];
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
         keys.push(key);
         let value = data[key];
-        if (typeof data[key] === "string") {
+        if (typeof data[key] === 'string') {
           value = `"${data[key]}"`;
         }
         values.push(value);
       }
     }
-    // console.log(keys, values);
     let str = `insert into ${tableName} (${keys}) values (${values})`;
-    // console.log(str);
 
     return new Promise((resolve, reject) => {
       runSql(
@@ -93,14 +128,15 @@ const sql = {
       );
     });
   },
+
+  // update tableName set xx="xx", yy=yy, zz=zz where key=value;
   update: (tableName, id, data) => {
-    // update tableName set xx="xx", yy=yy, zz=zz where key=value;
-    let [keyValueStr, index] = ["", 0];
+    let [keyValueStr, index] = ['', 0];
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
-        if (index) keyValueStr += ",";
+        if (index) keyValueStr += ',';
         let value = data[key];
-        if (typeof value === "string") value = `"${data[key]}"`;
+        if (typeof value === 'string') value = `"${data[key]}"`;
         keyValueStr += `${key}=${value}`;
         index++;
       }
@@ -114,8 +150,9 @@ const sql = {
       );
     });
   },
+
+  // delete from tableName where key=value;
   delete: (tableName, id) => {
-    // delete from tableName where key=value;
     let str = `delete from ${tableName} where id=${id}`;
     return new Promise((resolve, reject) => {
       runSql(
