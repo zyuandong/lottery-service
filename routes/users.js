@@ -30,16 +30,17 @@ router
     let data = await sql.queryByFields('user', ctx.request.query);
     ctx.body = data;
   })
-  .get('/test', (ctx) => {
-    ctx.body = 'test';
-  });
+  .post('/lottery', async (ctx) => {
+    // let data = await 
+    
+  })
 
-router.get('/', function (ctx, next) {
-  ctx.body = 'this is a users response!';
-});
+// router.get('/', function (ctx, next) {
+//   ctx.body = 'this is a users response!';
+// });
 
-router.get('/bar', function (ctx, next) {
-  ctx.body = 'this is a users/bar response';
-});
+// router.get('/bar', function (ctx, next) {
+//   ctx.body = 'this is a users/bar response';
+// });
 
 module.exports = router;
