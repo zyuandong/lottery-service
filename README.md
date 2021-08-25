@@ -21,8 +21,8 @@
 | name          | VARCHAR(36) |
 | password      | VARCHAR(18) |
 | avatar        | BLOB        |
-| gold_coin_num | int         |
-| is_admin      | CHAR(1)     |
+| gold_coin_num | INT         |
+| is_admin      | TINYINT     |
 
 ### 奖品表（prize）
 
@@ -32,15 +32,15 @@
 | name        | VARCHAR(36) |
 | pic         | BLOB        |
 | probability | DOUBLE      |
-| is_active   | CHAR(1)     |
+| is_active   | TINYINT     |
 
 ### 获奖记录表（award_record）
 
 | fields      | type        |
 | :---------- | :---------- |
 | oid         | VARCHAR(36) |
-| user_oid     | VARCHAR(36) |
-| prize_oid    | VARCHAR(36) |
+| user_oid    | VARCHAR(36) |
+| prize_oid   | VARCHAR(36) |
 | create_time | DATETIME    |
 
 ## TODO

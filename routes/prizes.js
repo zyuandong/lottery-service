@@ -10,7 +10,7 @@ router
     ctx.body = data;
   })
   .get('/', async (ctx) => {
-    let data = await sql.queryAll('prize');
+    let data = await sql.queryAll('prize', ctx.request.query);
     ctx.body = data;
   });
   // update active
