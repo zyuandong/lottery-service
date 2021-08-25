@@ -10,6 +10,7 @@ router
     ctx.body = data;
   })
   .get('/', async (ctx) => {
+    // TODO 根据状态排序
     let data = await sql.queryAll('prize', ctx.request.query);
     ctx.body = data;
   });
