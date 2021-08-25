@@ -11,7 +11,7 @@ router
       return ctx.body = {
         code: 500,
         errorCode: '500_01',
-        msg: 'Incorrect account information'
+        message: 'Incorrect account information'
       }
     }
     const oid = uuidv5(`${form.name}_${form.password}`, uuidv5.DNS)
@@ -20,7 +20,7 @@ router
       return ctx.body = {
         code: 500,
         errorCode: '500_02',
-        msg: 'Account already exists'
+        message: 'Account already exists'
       }
     }
     let data = await sql.insert('user', {...{oid}, ...form});
@@ -28,6 +28,10 @@ router
   })
   .get('/login', async (ctx) => {
     let data = await sql.queryByFields('user', ctx.request.query);
+    ctx.body = data;
+  })
+  .get('/', async (ctx) => {
+    let data = await sql.queryAll('user', ctx.request.query)
     ctx.body = data;
   })
   .post('/lottery', async (ctx) => {

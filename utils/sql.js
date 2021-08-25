@@ -2,7 +2,7 @@ const runSql = require('./runSql');
 
 const baseRes = {
   code: 200,
-  msg: 'success',
+  message: 'success',
 };
 
 function getByPage(tableName, filter) {
@@ -13,7 +13,7 @@ function getByPage(tableName, filter) {
     (page - 1) * pageSize
   }, ${pageSize};`;
   return new Promise((resolve, reject) => {
-    query(
+    runSql(
       str,
       (res) => {
         let data = {
@@ -21,7 +21,7 @@ function getByPage(tableName, filter) {
           message: '获取成功',
           data: {
             metadata: {
-              paginationParam: {
+              pagination: {
                 page,
                 pageSize,
                 total: 0,
@@ -31,9 +31,9 @@ function getByPage(tableName, filter) {
           },
         };
         runSql(
-          `select count(id) from ${tableName}`,
+          `select count(oid) from ${tableName}`,
           (res) => {
-            data.data.metadata.paginationParam.total = res[0]['count(id)'];
+            data.data.metadata.pagination.total = res[0]['count(oid)'];
             resolve(data);
           },
           (err) => reject(err)
@@ -59,7 +59,7 @@ const sql = {
     } else {
       return {
         code: 500,
-        msg: 'Fields is error',
+        message: 'Fields is error',
       };
     }
 
@@ -86,7 +86,11 @@ const sql = {
       let str = `select * from ${tableName}`;
       runSql(
         str,
-        (res) => resolve(res),
+        (res) =>
+          resolve({
+            ...baseRes,
+            data: res
+          }),
         (err) => reject(err)
       );
     });
@@ -98,7 +102,11 @@ const sql = {
       let str = `select * from ${tableName} where id=${id}`;
       runSql(
         str,
-        (res) => resolve(res),
+        (res) =>
+          resolve({
+            ...baseRes,
+            data: res,
+          }),
         (err) => reject(err)
       );
     });
@@ -123,10 +131,11 @@ const sql = {
     return new Promise((resolve, reject) => {
       runSql(
         str,
-        (res) => resolve({
-          ...baseRes,
-          // data: res
-        }),
+        (res) =>
+          resolve({
+            ...baseRes,
+            // data: res
+          }),
         (err) => reject(err)
       );
     });
