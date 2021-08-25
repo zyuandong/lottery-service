@@ -35,8 +35,13 @@ router
     ctx.body = data;
   })
   .post('/lottery', async (ctx) => {
-    // let data = await 
-    
+    // TODO
+    let data = Math.floor(Math.random() * 7)
+    ctx.body = {
+      code: 200,
+      message: 'success',
+      data
+    }
   })
 
 // router.get('/', function (ctx, next) {
