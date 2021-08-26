@@ -33,8 +33,9 @@
 | number       | INT         |
 | pic          | BLOB        |
 | probability  | DOUBLE      |
-| is_active    | TINYINT(1)  |
 | is_gold_coin | TINYINT(1)  |
+| is_active    | TINYINT(1)  |
+| place_index  | TINYINT(1)  |
 
 ### 获奖记录表（award_record）
 

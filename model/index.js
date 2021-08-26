@@ -23,8 +23,9 @@ const tables = {
       number INT NOT NULL DEFAULT 1,
       pic BLOB,
       probability DOUBLE,
+      is_gold_coin TINYINT(1),
       is_active TINYINT(1),
-      is_gold_coin TINYINT(1)
+      place_index TINYINT(1)
     )
     ENGINE=InnoDB
     DEFAULT CHARSET=utf8mb4;
