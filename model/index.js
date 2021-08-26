@@ -9,7 +9,7 @@ const tables = {
       name VARCHAR(36) NOT NULL,
       password VARCHAR(18) NOT NULL,
       avatar BLOB,
-      gold_coin_num int DEFAULT 300,
+      gold_coin_num INT DEFAULT 300,
       is_admin TINYINT(1),
       create_time DATETIME
     )
@@ -20,9 +20,11 @@ const tables = {
     CREATE TABLE IF NOT EXISTS prize(
       oid VARCHAR(36) NOT NULL PRIMARY KEY,
       name VARCHAR(36) NOT NULL,
+      number INT NOT NULL DEFAULT 1,
       pic BLOB,
       probability DOUBLE,
-      is_active TINYINT(1)
+      is_active TINYINT(1),
+      is_gold_coin TINYINT(1)
     )
     ENGINE=InnoDB
     DEFAULT CHARSET=utf8mb4;

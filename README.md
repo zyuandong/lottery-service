@@ -22,17 +22,19 @@
 | password      | VARCHAR(18) |
 | avatar        | BLOB        |
 | gold_coin_num | INT         |
-| is_admin      | TINYINT     |
+| is_admin      | TINYINT(1)  |
 
 ### 奖品表（prize）
 
-| fields      | type        |
-| :---------- | :---------- |
-| oid         | VARCHAR(36) |
-| name        | VARCHAR(36) |
-| pic         | BLOB        |
-| probability | DOUBLE      |
-| is_active   | TINYINT     |
+| fields       | type        |
+| :----------- | :---------- |
+| oid          | VARCHAR(36) |
+| name         | VARCHAR(36) |
+| number       | INT         |
+| pic          | BLOB        |
+| probability  | DOUBLE      |
+| is_active    | TINYINT(1)  |
+| is_gold_coin | TINYINT(1)  |
 
 ### 获奖记录表（award_record）
 

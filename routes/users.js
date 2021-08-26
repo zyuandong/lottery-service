@@ -37,6 +37,11 @@ router
   .post('/lottery', async (ctx) => {
     // TODO
     let data = Math.floor(Math.random() * 7)
+    let params = ctx.request.body;
+
+    // computed goldCoin
+
+    // award record
     ctx.body = {
       code: 200,
       message: 'success',
