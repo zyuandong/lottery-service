@@ -10,7 +10,7 @@ const tables = {
       password VARCHAR(18) NOT NULL,
       avatar BLOB,
       gold_coin_num int DEFAULT 300,
-      is_admin TINYINT,
+      is_admin TINYINT(1),
       create_time DATETIME
     )
     ENGINE=InnoDB
@@ -22,7 +22,7 @@ const tables = {
       name VARCHAR(36) NOT NULL,
       pic BLOB,
       probability DOUBLE,
-      is_active TINYINT
+      is_active TINYINT(1)
     )
     ENGINE=InnoDB
     DEFAULT CHARSET=utf8mb4;
