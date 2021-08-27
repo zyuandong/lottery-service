@@ -31,12 +31,48 @@ router
     ctx.body = data;
   })
   .get('/', async (ctx) => {
-    const data = await sql.queryAll('user', ctx.request.query, [{field: 'is_admin', type: 'desc'}]);
+    const data = await sql.queryAll('user', ctx.request.query, [
+      { field: 'is_admin', type: 'desc' },
+    ]);
     ctx.body = data;
   })
   .post('/lottery', async (ctx) => {
-    // TODO
-    const data = Math.floor(Math.random() * 7);
+    let placeIndexRes = 0;
+    let hashArr = new Array(8).fill(0);
+    let fullPrizePoolArr = new Array(8).fill(0);
+    const random = Math.floor(Math.random() * 11);
+
+    const { data: prizePoolArr } = await sql.queryByFields(
+      'prize',
+      { is_active: 1 },
+      [{ field: 'place_index', type: 'asc' }]
+    );
+
+    let count = 0;
+    let prizePoolIndex = 0;
+    // 计算奖品概率离散值
+    hashArr = hashArr.map((item, index) => {
+      if (prizePoolArr[prizePoolIndex].place_index === index) {
+        fullPrizePoolArr[index] = prizePoolArr[prizePoolIndex];
+        if (prizePoolArr[prizePoolIndex].probability === 0) {
+          prizePoolIndex++;
+          return 0;
+        }
+        count += prizePoolArr[prizePoolIndex].probability * 10;
+        prizePoolIndex++;
+        item = count;
+      }
+      return item;
+    });
+
+    // 计算得出奖品索引
+    for (let i = 0; i < hashArr.length; i++) {
+      if (random <= hashArr[i]) {
+        placeIndexRes = Number(i);
+        break;
+      }
+    }
+
     // let params = ctx.request.body;
 
     // computed goldCoin
@@ -45,7 +81,11 @@ router
     ctx.body = {
       code: 200,
       message: 'success',
-      data,
+      data: placeIndexRes,
+      random,
+      hashArr,
+      prizePoolArr,
+      fullPrizePoolArr,
     };
   });
 

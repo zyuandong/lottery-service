@@ -18,7 +18,7 @@ function getByPage(tableName, filter, order) {
       orderStr +=
         index === 0
           ? `${item.field} ${item.type}`
-          : `, ${item.field} ${item.type} `;
+          : `, ${item.field} ${item.type}`;
     });
 
     str = `select * from ${tableName} ${orderStr} ${limitStr}`;
@@ -60,12 +60,12 @@ function getByPage(tableName, filter, order) {
 
 const sql = {
   // select * from tableName where fields.item = 'xxx';
-  queryByFields: (tableName, fields) => {
-    let whereSql = '';
+  queryByFields: (tableName, fields, order) => {
+    let whereStr = '';
 
     if (fields && Object.keys(fields).length) {
       Object.keys(fields).forEach((key, i) => {
-        whereSql +=
+        whereStr +=
           i === 0
             ? `${key} = '${fields[key]}'`
             : ` && ${key} = '${fields[key]}'`;
@@ -77,8 +77,17 @@ const sql = {
       };
     }
 
+    let orderStr = '';
+    if (order && order.length) {
+      orderStr = 'order by ';
+      order.forEach((item, index) => {
+        orderStr += index === 0 ? `${item.field} ${item.type}` : `, ${item.field} ${item.type}`;
+      });
+    }
+
     return new Promise((resolve, reject) => {
-      let str = `select * from ${tableName} where ${whereSql}`;
+      let str = `select * from ${tableName} where ${whereStr} ${orderStr}`;
+      // console.log('===', str);
       runSql(
         str,
         (res) =>
