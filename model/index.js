@@ -23,7 +23,7 @@ const tables = {
       number INT NOT NULL DEFAULT 1,
       pic BLOB,
       probability DOUBLE,
-      is_gold_coin TINYINT(1),
+      type TINYINT(1) NOT NULL DEFAULT 0,
       is_active TINYINT(1),
       place_index TINYINT(1)
     )

@@ -26,16 +26,16 @@
 
 ### 奖品表（prize）
 
-| fields       | type        |
-| :----------- | :---------- |
-| oid          | VARCHAR(36) |
-| name         | VARCHAR(36) |
-| number       | INT         |
-| pic          | BLOB        |
-| probability  | DOUBLE      |
-| is_gold_coin | TINYINT(1)  |
-| is_active    | TINYINT(1)  |
-| place_index  | TINYINT(1)  |
+| fields      | type        |
+| :---------- | :---------- |
+| oid         | VARCHAR(36) |
+| name        | VARCHAR(36) |
+| number      | INT         |
+| pic         | BLOB        |
+| probability | DOUBLE      |
+| type        | TINYINT(1)  |
+| is_active   | TINYINT(1)  |
+| place_index | TINYINT(1)  |
 
 ### 获奖记录表（award_record）
 
