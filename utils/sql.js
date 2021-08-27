@@ -5,13 +5,27 @@ const baseRes = {
   message: 'success',
 };
 
-function getByPage(tableName, filter) {
+function getByPage(tableName, filter, order) {
   // select * from tableName limit (page - 1) * pageSize, pageSize;
   // TODO 是否能执行一条 sql 语句实现分页并得到总条数
+  let str = '';
   const { page, pageSize } = { ...filter };
-  const str = `select * from ${tableName} limit ${
-    (page - 1) * pageSize
-  }, ${pageSize};`;
+  const limitStr = `limit ${(page - 1) * pageSize}, ${pageSize}`;
+
+  let orderStr = 'order by ';
+  if (order && order.length) {
+    order.forEach((item, index) => {
+      orderStr +=
+        index === 0
+          ? `${item.field} ${item.type}`
+          : `, ${item.field} ${item.type} `;
+    });
+
+    str = `select * from ${tableName} ${orderStr} ${limitStr}`;
+  } else {
+    str = `select * from ${tableName} ${limitStr}`;
+  }
+
   return new Promise((resolve, reject) => {
     runSql(
       str,
@@ -78,9 +92,10 @@ const sql = {
   },
 
   // select * from tableName;
-  queryAll: (tableName, filter) => {
+  queryAll: (tableName, filter, order) => {
+    // console.log('===', filter);
     if (filter && Object.keys(filter).length) {
-      return getByPage(tableName, filter);
+      return getByPage(tableName, filter, order);
     }
     return new Promise((resolve, reject) => {
       let str = `select * from ${tableName}`;
