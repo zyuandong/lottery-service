@@ -14,13 +14,16 @@ router
     let data = await sql.queryAll('prize', ctx.request.query);
     ctx.body = data;
   })
-  .get('/prize_pools', async (ctx) => {
+  .get('/get_prize_pool', async (ctx) => {
     let data = await sql.queryByFields('prize', { is_active: 1 });
     ctx.body = data;
+  })
+  .put('/set_prize_pool', async (ctx) => {
+    let form = ctx.request.body;
+    // let { oid, place_index } = form;
+    let data = await sql.update('prize', form.oid, form);
+    ctx.body = data;
   });
-// update active
-// update probability
 // upload pic
-// set prize pools
 
 module.exports = router;

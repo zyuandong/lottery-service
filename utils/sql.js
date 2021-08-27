@@ -89,7 +89,7 @@ const sql = {
         (res) =>
           resolve({
             ...baseRes,
-            data: res
+            data: res,
           }),
         (err) => reject(err)
       );
@@ -142,7 +142,7 @@ const sql = {
   },
 
   // update tableName set xx="xx", yy=yy, zz=zz where key=value;
-  update: (tableName, id, data) => {
+  update: (tableName, oid, data) => {
     let [keyValueStr, index] = ['', 0];
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
@@ -153,11 +153,16 @@ const sql = {
         index++;
       }
     }
-    let str = `update ${tableName} set ${keyValueStr} where id=${id}`;
+    let str = `update ${tableName} set ${keyValueStr} where oid=${oid}`;
+    // console.log('===', str);
     return new Promise((resolve, reject) => {
       runSql(
         str,
-        (res) => resolve(res),
+        (res) =>
+          resolve({
+            ...baseRes,
+            // data: res
+          }),
         (err) => reject(err)
       );
     });
