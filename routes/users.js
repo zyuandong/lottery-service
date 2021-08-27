@@ -31,7 +31,7 @@ router
     ctx.body = data;
   })
   .get('/', async (ctx) => {
-    const data = await sql.queryAll('user', ctx.request.query);
+    const data = await sql.queryAll('user', ctx.request.query, [{field: 'is_admin', type: 'desc'}]);
     ctx.body = data;
   })
   .post('/lottery', async (ctx) => {
