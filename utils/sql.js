@@ -153,7 +153,7 @@ const sql = {
         index++;
       }
     }
-    let str = `update ${tableName} set ${keyValueStr} where oid=${oid}`;
+    let str = `update ${tableName} set ${keyValueStr} where oid="${oid}"`;
     // console.log('===', str);
     return new Promise((resolve, reject) => {
       runSql(
