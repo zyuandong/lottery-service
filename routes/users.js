@@ -8,36 +8,36 @@ router
   .post('/register', async (ctx) => {
     const form = ctx.request.body;
     if (!form.name || !form.password) {
-      return ctx.body = {
+      return (ctx.body = {
         code: 500,
         errorCode: '500_01',
-        message: 'Incorrect account information'
-      }
+        message: 'Incorrect account information',
+      });
     }
-    const oid = uuidv5(`${form.name}_${form.password}`, uuidv5.DNS)
+    const oid = uuidv5(`${form.name}_${form.password}`, uuidv5.DNS);
     const checkMulti = await sql.queryByFields('user', form);
     if (checkMulti.data.length) {
-      return ctx.body = {
+      return (ctx.body = {
         code: 500,
         errorCode: '500_02',
-        message: 'Account already exists'
-      }
+        message: 'Account already exists',
+      });
     }
-    let data = await sql.insert('user', {...{oid}, ...form});
+    const data = await sql.insert('user', { ...{ oid }, ...form });
     ctx.body = data;
   })
   .get('/login', async (ctx) => {
-    let data = await sql.queryByFields('user', ctx.request.query);
+    const data = await sql.queryByFields('user', ctx.request.query);
     ctx.body = data;
   })
   .get('/', async (ctx) => {
-    let data = await sql.queryAll('user', ctx.request.query)
+    const data = await sql.queryAll('user', ctx.request.query);
     ctx.body = data;
   })
   .post('/lottery', async (ctx) => {
     // TODO
-    let data = Math.floor(Math.random() * 7)
-    let params = ctx.request.body;
+    const data = Math.floor(Math.random() * 7);
+    // let params = ctx.request.body;
 
     // computed goldCoin
 
@@ -45,16 +45,8 @@ router
     ctx.body = {
       code: 200,
       message: 'success',
-      data
-    }
-  })
-
-// router.get('/', function (ctx, next) {
-//   ctx.body = 'this is a users response!';
-// });
-
-// router.get('/bar', function (ctx, next) {
-//   ctx.body = 'this is a users/bar response';
-// });
+      data,
+    };
+  });
 
 module.exports = router;
