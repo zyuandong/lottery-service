@@ -121,15 +121,15 @@ const sql = {
   },
 
   // select * from tableName where key=value;
-  queryById: (tableName, id) => {
+  queryById: (tableName, oid) => {
     return new Promise((resolve, reject) => {
-      let str = `select * from ${tableName} where id=${id}`;
+      let str = `select * from ${tableName} where oid='${oid}'`;
       runSql(
         str,
         (res) =>
           resolve({
             ...baseRes,
-            data: res,
+            data: res[0],
           }),
         (err) => reject(err)
       );

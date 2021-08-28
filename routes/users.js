@@ -37,6 +37,10 @@ router
     ]);
     ctx.body = data;
   })
+  .get('/:oid', async (ctx) => {
+    const data = await sql.queryById('user', ctx.params.oid);
+    ctx.body = data;
+  })
   .post('/lottery', async (ctx) => {
     const {
       name: user_name,
