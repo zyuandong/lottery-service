@@ -1,6 +1,7 @@
 const router = require('koa-router')();
 const sql = require('../utils/sql');
 const { v5: uuidv5 } = require('uuid');
+const sd = require('silly-datetime');
 
 router.prefix('/users');
 
@@ -37,6 +38,19 @@ router
     ctx.body = data;
   })
   .post('/lottery', async (ctx) => {
+    const {
+      name: user_name,
+      oid: user_oid,
+      is_admin,
+      gold_coin_num,
+    } = ctx.request.body;
+    if (gold_coin_num < 100) {
+      return (ctx.body = {
+        code: 500,
+        errorCode: '500_01',
+        message: 'The number of gold coins is less than 100',
+      });
+    }
     let placeIndexRes = 0;
     let hashArr = new Array(8).fill(0);
     let fullPrizePoolArr = new Array(8).fill(0);
@@ -51,7 +65,7 @@ router
     let count = 0;
     let prizePoolIndex = 0;
     // 计算奖品概率离散值
-    hashArr = hashArr.map((item, index) => {
+    hashArr = await hashArr.map((item, index) => {
       if (prizePoolArr[prizePoolIndex].place_index === index) {
         fullPrizePoolArr[index] = prizePoolArr[prizePoolIndex];
         if (prizePoolArr[prizePoolIndex].probability === 0) {
@@ -73,11 +87,50 @@ router
       }
     }
 
-    // let params = ctx.request.body;
+    const prizeRes = fullPrizePoolArr[placeIndexRes];
 
-    // computed goldCoin
+    // computed gold_coin_number
+    // “金币”、“实物” 类型奖品入库
+    if (prizeRes.type) {
+      await sql.insert('award_record', {
+        oid: uuidv5(`${user_oid}_${prizeRes.oid}_${new Date()}`, uuidv5.DNS),
+        user_oid,
+        user_name,
+        prize_oid: prizeRes.oid,
+        prize_name: prizeRes.name,
+        create_time: `${sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
+      });
 
-    // award record
+      /**
+       * is_admin
+       *  ? end
+       *  : prize.type === 1 ? (-100 + prize.number) : -100
+       */
+      if (!is_admin) {
+        if (prizeRes.type === 1) {
+          await sql.update('user', user_oid, {
+            gold_coin_num: `${gold_coin_num - 100 + prizeRes.number}`,
+          });
+        } else {
+          await sql.update('user', user_oid, {
+            gold_coin_num: `${gold_coin_num - 100}`,
+          });
+        }
+      }
+    } else {
+      // “文字” 类
+      /**
+       * is_admin
+       *  ? end
+       *  : -100
+       *  */
+      if (!is_admin) {
+        await sql.update('user', user_oid, {
+          gold_coin_num: `${gold_coin_num - 100}`,
+        });
+      }
+    }
+
     ctx.body = {
       code: 200,
       message: 'success',
