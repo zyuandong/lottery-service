@@ -138,11 +138,13 @@ router
     ctx.body = {
       code: 200,
       message: 'success',
-      data: placeIndexRes,
-      random,
-      hashArr,
-      prizePoolArr,
-      fullPrizePoolArr,
+      data: {
+        prize: prizeRes,
+        placeIndex: placeIndexRes,
+        random,
+        hashArr,
+        fullPrizePoolArr,
+      },
     };
   });
 
