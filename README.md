@@ -43,7 +43,9 @@
 | :---------- | :---------- |
 | oid         | VARCHAR(36) |
 | user_oid    | VARCHAR(36) |
+| user_name   | VARCHAR(36) |
 | prize_oid   | VARCHAR(36) |
+| prize_name  | VARCHAR(36) |
 | create_time | DATETIME    |
 
 ## TODO

@@ -34,7 +34,9 @@ const tables = {
     CREATE TABLE IF NOT EXISTS award_record(
       oid VARCHAR(36) NOT NULL PRIMARY KEY,
       user_oid VARCHAR(36) NOT NULL,
+      user_name VARCHAR(36) NOT NULL,
       prize_oid VARCHAR(36) NOT NULL,
+      prize_name VARCHAR(36) NOT NULL,
       create_time DATETIME,
       FOREIGN KEY(user_oid) REFERENCES user(oid) ON DELETE NO ACTION ON UPDATE NO ACTION,
       FOREIGN KEY(prize_oid) REFERENCES prize(oid) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -47,8 +49,8 @@ const tables = {
 const oid = uuidv5('admin_123456', uuidv5.DNS);
 const adminSql = `
   INSERT INTO user 
-  (oid, name, password, is_admin, create_time) values 
-  ('${oid}', 'admin', '123456', 'T', '${sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss')}');
+  (oid, name, password, is_admin, gold_coin_num, create_time) values 
+  ('${oid}', 'admin', '123456', 1, 300, '${sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss')}');
 `;
 
 const createAdmin = () => {
