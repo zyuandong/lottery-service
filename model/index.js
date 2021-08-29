@@ -8,7 +8,7 @@ const tables = {
       oid VARCHAR(36) NOT NULL PRIMARY KEY,
       name VARCHAR(36) NOT NULL,
       password VARCHAR(18) NOT NULL,
-      avatar BLOB,
+      avatar VARCHAR(72),
       gold_coin_num INT DEFAULT 300,
       is_admin TINYINT(1),
       create_time DATETIME
@@ -21,7 +21,7 @@ const tables = {
       oid VARCHAR(36) NOT NULL PRIMARY KEY,
       name VARCHAR(36) NOT NULL,
       number INT NOT NULL DEFAULT 1,
-      pic BLOB,
+      pic VARCHAR(72),
       probability DOUBLE,
       type TINYINT(1) NOT NULL DEFAULT 0,
       is_active TINYINT(1),
