@@ -85,6 +85,10 @@ router
 
     // 计算得出奖品索引
     for (let i = 0; i < hashArr.length; i++) {
+      // 规避 0 号位奖品概率为 0，random 也为 0 的意外情况
+      if (i === 0 && hashArr[0] === 0) {
+        continue;
+      }
       if (random <= hashArr[i]) {
         placeIndexRes = Number(i);
         break;
