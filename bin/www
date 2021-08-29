@@ -20,6 +20,24 @@ var port = normalizePort(process.env.PORT || '3000');
  */
 
 var server = http.createServer(app.callback());
+const io = require('socket.io')(server);
+
+io.on('connection', (socket) => {
+  console.log('== Create socket connection');
+
+  // 登录消息
+  socket.on('MSG_LOGIN', (msg) => io.emit('MSG_LOGIN', msg));
+
+  // 抽奖消息
+  socket.on('MSG_LOTTERY', (msg) => io.emit('MSG_LOTTERY', msg));
+
+  // 奖池更新消息
+  socket.on('MSG_UPDATE_PRIZE_POOL', (msg) => io.emit('MSG_UPDATE_PRIZE_POOL', msg));
+
+  socket.on('disconnect', () => {
+    console.log('== Client disconnected');
+  });
+});
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -58,9 +76,7 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -83,8 +99,6 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
