@@ -28,7 +28,15 @@ router
     ctx.body = data;
   })
   .get('/login', async (ctx) => {
-    const data = await sql.queryByFields('user', ctx.request.query);
+    const {name, password} = ctx.request.query;
+    if (!name || !password) {
+      return ctx.body = {
+        code: 500,
+        errorCode: '500_01',
+        message: 'Incorrect account information'
+      }
+    }
+    const data = await sql.queryByFields('user', {name, password});
     ctx.body = data;
   })
   .get('/', async (ctx) => {
