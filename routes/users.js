@@ -82,6 +82,42 @@ router
     const data = await sql.queryById('user', ctx.params.oid);
     ctx.body = data;
   })
+  .post('/:oid/avatar/upload', async (ctx) => {
+    const publicDir = 'images/avatars';
+    const fileDir = path.join(path.resolve('.'), 'public/', publicDir);
+    // console.log(fileDir);
+
+    const state = await tools.isExistsDir(fileDir);
+    // console.log(state);
+
+    if (!state) {
+      try {
+        fs.mkdirSync(`${path.join(path.resolve('.'), 'public/images/')}`);
+      } catch (error) {
+        console.log(error);
+      }
+      fs.mkdirSync(`${path.join(path.resolve('.'), 'public/images/avatars')}`);
+    }
+
+    // 上传单个文件
+    const file = ctx.request.files.file; // 获取上传文件
+    // 创建可读流
+    const reader = fs.createReadStream(file.path);
+
+    // let filePath = path.join(__dirname, 'images/prizes') + `/${file.name}`;
+    let filePath = `${fileDir}/${file.name}`;
+    // 创建可写流
+    const upStream = fs.createWriteStream(filePath);
+    // 可读流通过管道写入可写流
+    reader.pipe(upStream);
+
+    const res = await sql.update('user', ctx.params.oid, { avatar: `${publicDir}/${file.name}` });
+
+    ctx.body = {
+      ...res,
+      data: `${publicDir}/${file.name}`
+    };
+  })
   .post('/lottery', async (ctx) => {
     const { name: user_name, oid: user_oid, is_admin, gold_coin_num } = ctx.request.body;
     if (gold_coin_num < 100) {
