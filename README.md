@@ -20,7 +20,7 @@
 | oid           | VARCHAR(36) |
 | name          | VARCHAR(36) |
 | password      | VARCHAR(18) |
-| avatar        | BLOB        |
+| avatar        | VARCHAR(72) |
 | gold_coin_num | INT         |
 | is_admin      | TINYINT(1)  |
 
@@ -31,7 +31,7 @@
 | oid         | VARCHAR(36) |
 | name        | VARCHAR(36) |
 | number      | INT         |
-| pic         | BLOB        |
+| pic         | VARCHAR(72) |
 | probability | DOUBLE      |
 | type        | TINYINT(1)  |
 | is_active   | TINYINT(1)  |
@@ -53,6 +53,8 @@
 - [ ] 签到功能
 - [ ] 生成用户 Token
 - [ ] 优化创建目录方式
+- [ ] 更换头像
+- [x] 生成随机头像
 - [x] 消息推送
 - [x] 抽奖逻辑
 - [x] 奖品管理

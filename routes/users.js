@@ -2,6 +2,10 @@ const router = require('koa-router')();
 const sql = require('../utils/sql');
 const { v5: uuidv5 } = require('uuid');
 const sd = require('silly-datetime');
+const Identicon = require('identicon.js');
+const fs = require('fs');
+const path = require('path');
+const tools = require('../utils/tools');
 
 router.prefix('/users');
 
@@ -16,7 +20,11 @@ router
       });
     }
     const oid = uuidv5(`${form.name}_${form.password}`, uuidv5.DNS);
-    const checkMulti = await sql.queryByFields('user', form);
+    const checkMulti = await sql.queryByFields('user', {
+      name: form.name,
+      password: form.password,
+    });
+    console.log('===checkMulti', checkMulti);
     if (checkMulti.data.length) {
       return (ctx.body = {
         code: 500,
@@ -24,19 +32,44 @@ router
         message: 'Account already exists',
       });
     }
-    const data = await sql.insert('user', { ...{ oid }, ...form });
+
+    const publicDir = 'images/avatars';
+    const fileDir = path.join(path.resolve('.'), 'public', publicDir);
+    // console.log(fileDir);
+
+    const state = await tools.isExistsDir(fileDir);
+    // console.log(state);
+
+    if (!state) {
+      try {
+        fs.mkdirSync(`${path.join(path.resolve('.'), 'public/images/')}`);
+      } catch (error) {
+        console.log(error);
+      }
+      fs.mkdirSync(`${path.join(path.resolve('.'), 'public/images/avatars')}`);
+    }
+
+    // 使用 identicon.js 生成随机 GitHub 风格头像
+    const base64Str = new Identicon(oid, { format: 'svg' }).toString();
+    // 将 base64 转为 svg 文件，并保存在 public/images/avatars 路径下
+    tools.base64ToSVG(base64Str, `${fileDir}/${oid}.svg`);
+
+    const data = await sql.insert('user', {
+      ...{ oid, avatar: `${publicDir}/${oid}.svg` },
+      ...form,
+    });
     ctx.body = data;
   })
   .get('/login', async (ctx) => {
-    const {name, password} = ctx.request.query;
+    const { name, password } = ctx.request.query;
     if (!name || !password) {
-      return ctx.body = {
+      return (ctx.body = {
         code: 500,
         errorCode: '500_01',
-        message: 'Incorrect account information'
-      }
+        message: 'Incorrect account information',
+      });
     }
-    const data = await sql.queryByFields('user', {name, password});
+    const data = await sql.queryByFields('user', { name, password });
     ctx.body = data;
   })
   .get('/', async (ctx) => {
@@ -50,12 +83,7 @@ router
     ctx.body = data;
   })
   .post('/lottery', async (ctx) => {
-    const {
-      name: user_name,
-      oid: user_oid,
-      is_admin,
-      gold_coin_num,
-    } = ctx.request.body;
+    const { name: user_name, oid: user_oid, is_admin, gold_coin_num } = ctx.request.body;
     if (gold_coin_num < 100) {
       return (ctx.body = {
         code: 500,
@@ -68,11 +96,9 @@ router
     let fullPrizePoolArr = new Array(8).fill(0);
     const random = Math.floor(Math.random() * 11);
 
-    const { data: prizePoolArr } = await sql.queryByFields(
-      'prize',
-      { is_active: 1 },
-      [{ field: 'place_index', type: 'asc' }]
-    );
+    const { data: prizePoolArr } = await sql.queryByFields('prize', { is_active: 1 }, [
+      { field: 'place_index', type: 'asc' },
+    ]);
 
     let count = 0;
     let prizePoolIndex = 0;

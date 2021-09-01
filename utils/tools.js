@@ -53,8 +53,21 @@ const isExistsDir = async (dir) => {
 //   }
 // }
 
+const base64ToSVG = (str, filePath) => {
+  const buf = Buffer.from(str, 'base64');
+  fs.writeFile(filePath, buf, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('== base64 to SVG success');
+    }
+  });
+  return filePath;
+};
+
 module.exports = {
   mkdir,
   // mkdirs,
   isExistsDir,
+  base64ToSVG,
 };

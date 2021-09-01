@@ -51,7 +51,11 @@ router
     // console.log(state);
 
     if (!state) {
-      fs.mkdirSync(`${path.join(path.resolve('.'), 'public/images/')}`);
+      try {
+        fs.mkdirSync(`${path.join(path.resolve('.'), 'public/images/')}`);
+      } catch (error) {
+        console.log(error);
+      }
       fs.mkdirSync(`${path.join(path.resolve('.'), 'public/images/prizes')}`);
     }
 
