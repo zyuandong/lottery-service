@@ -37,4 +37,9 @@ router.get('/latest', async (ctx) => {
   ctx.body = data;
 });
 
+router.get('/users/:oid', async (ctx) => {
+  const data = await sql.queryByFields('award_record', {user_oid: ctx.params.oid}, [{field: 'create_time', type: 'desc'}]);
+  ctx.body = data;
+});
+
 module.exports = router;
