@@ -75,6 +75,7 @@ router
   .get('/', async (ctx) => {
     const data = await sql.queryAll('user', ctx.request.query, [
       { field: 'is_admin', type: 'desc' },
+      { field: 'create_time', type: 'desc' },
     ]);
     ctx.body = data;
   })
@@ -115,7 +116,7 @@ router
 
     ctx.body = {
       ...res,
-      data: `${publicDir}/${file.name}`
+      data: `${publicDir}/${file.name}`,
     };
   })
   .post('/lottery', async (ctx) => {
