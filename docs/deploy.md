@@ -105,3 +105,7 @@ docker run -d \
 -e TZ="Asia/Shanghai" \
 lottery-service
 ```
+
+使用命令 `docker ps` 查看正在运行中的容器：
+
+输出的列表中出现 lottery-service:v1，即代表服务部署成功，端口为 3000
