@@ -25,6 +25,10 @@ router
     });
     ctx.body = data;
   })
+  .del('/:oid', async (ctx) => {
+    const data = await sql.delete('prize', ctx.params.oid);
+    ctx.body = data;
+  })
   .get('/', async (ctx) => {
     // TODO 根据状态排序
     // const data = await sql.queryAll('prize', ctx.request.query);

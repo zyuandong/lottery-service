@@ -193,12 +193,15 @@ const sql = {
   },
 
   // delete from tableName where key=value;
-  delete: (tableName, id) => {
-    let str = `delete from ${tableName} where id=${id}`;
+  delete: (tableName, oid) => {
+    let str = `delete from ${tableName} where oid="${oid}"`;
+
     return new Promise((resolve, reject) => {
       runSql(
         str,
-        (res) => resolve(res),
+        (res) => resolve({
+          ...baseRes
+        }),
         (err) => reject(err)
       );
     });
