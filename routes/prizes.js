@@ -11,7 +11,7 @@ router
   .post('/add', async (ctx) => {
     const form = ctx.request.body;
     const oid = uuidv5(`${form.name}`, uuidv5.DNS);
-    const checkMulti = await sql.queryByFields('prize', {name: form.name});
+    const checkMulti = await sql.queryByFields('prize', { name: form.name });
     if (checkMulti.data.length) {
       return (ctx.body = {
         code: 500,
@@ -23,6 +23,10 @@ router
       ...{ oid, probability: 0 },
       ...form,
     });
+    ctx.body = data;
+  })
+  .put('/:oid', async (ctx) => {
+    const data = await sql.update('prize', ctx.params.oid, ctx.request.body);
     ctx.body = data;
   })
   .del('/:oid', async (ctx) => {
