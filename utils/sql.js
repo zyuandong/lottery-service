@@ -15,10 +15,7 @@ function getByPage(tableName, filter, order) {
   let orderStr = 'order by ';
   if (order && order.length) {
     order.forEach((item, index) => {
-      orderStr +=
-        index === 0
-          ? `${item.field} ${item.type}`
-          : `, ${item.field} ${item.type}`;
+      orderStr += index === 0 ? `${item.field} ${item.type}` : `, ${item.field} ${item.type}`;
     });
 
     str = `select * from ${tableName} ${orderStr} ${limitStr}`;
@@ -65,10 +62,7 @@ const sql = {
 
     if (fields && Object.keys(fields).length) {
       Object.keys(fields).forEach((key, i) => {
-        whereStr +=
-          i === 0
-            ? `${key} = '${fields[key]}'`
-            : ` && ${key} = '${fields[key]}'`;
+        whereStr += i === 0 ? `${key} = '${fields[key]}'` : ` && ${key} = '${fields[key]}'`;
       });
     } else {
       return {
@@ -129,7 +123,7 @@ const sql = {
         (res) =>
           resolve({
             ...baseRes,
-            data: res[0],
+            data: JSON.parse(JSON.stringify(res))[0],
           }),
         (err) => reject(err)
       );
@@ -185,7 +179,7 @@ const sql = {
         (res) =>
           resolve({
             ...baseRes,
-            // data: res
+            data: res
           }),
         (err) => reject(err)
       );
@@ -199,9 +193,10 @@ const sql = {
     return new Promise((resolve, reject) => {
       runSql(
         str,
-        (res) => resolve({
-          ...baseRes
-        }),
+        (res) =>
+          resolve({
+            ...baseRes,
+          }),
         (err) => reject(err)
       );
     });

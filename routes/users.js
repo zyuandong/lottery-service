@@ -24,7 +24,7 @@ router
       name: form.name,
       password: form.password,
     });
-    console.log('===checkMulti', checkMulti);
+    // console.log('===checkMulti', checkMulti);
     if (checkMulti.data.length) {
       return (ctx.body = {
         code: 500,
@@ -217,6 +217,22 @@ router
         hashArr,
         fullPrizePoolArr,
       },
+    };
+  })
+  .post(`/:oid/sign_in`, async (ctx) => {
+    const { data: user } = await sql.queryById('user', ctx.params.oid);
+    // TODO 验证是否可以签到
+    const gold_coin_num = (user.gold_coin_num += 300);
+    const last_sign_in_time = `${sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`;
+    await sql.update('user', ctx.params.oid, {
+      gold_coin_num,
+      last_sign_in_time,
+    });
+
+    ctx.body = {
+      code: 200,
+      message: 'success',
+      data: { ...user, gold_coin_num, last_sign_in_time },
     };
   });
 

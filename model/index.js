@@ -11,7 +11,8 @@ const tables = {
       avatar VARCHAR(72),
       gold_coin_num INT DEFAULT 300,
       is_admin TINYINT(1),
-      create_time DATETIME
+      create_time DATETIME,
+      last_sign_in_time DATETIME
     )
     ENGINE=InnoDB
     DEFAULT CHARSET=utf8mb4;
