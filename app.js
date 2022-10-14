@@ -11,6 +11,9 @@ const routes = require('./routes/index');
 // const index = require("./routes/index");
 // const users = require("./routes/users");
 
+// swagger
+const { koaSwagger } = require('koa2-swagger-ui');
+
 require('./model/index');
 
 // error handler
@@ -40,6 +43,16 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start;
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
+
+// swagger
+app.use(
+  koaSwagger({
+    routePrefix: '/swagger/index.html', // 配置 swagger 的访问路径
+    swaggerOptions: {
+      url: '/swagger/swagger.json', // 配置 swagger 的文档配置 URL，展示的 API 都是通过这个接口生成的
+    },
+  })
+);
 
 // routes
 

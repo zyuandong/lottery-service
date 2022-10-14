@@ -10,6 +10,39 @@ const tools = require('../utils/tools');
 router.prefix('/users');
 
 router
+  /**
+   * @swagger
+   * /users/register:
+   *    post:
+   *      tags:
+   *      - User
+   *      summary: 注册用户
+   *      consumes:
+   *        - application/json
+   *      parameters:
+   *      - name: system_manager
+   *        in: body
+   *        description: 新增管理员信息
+   *        schema:
+   *          type: object
+   *          required:
+   *            - id
+   *            - name
+   *            - password
+   *          properties:
+   *            name:
+   *              type: string
+   *              description: 用户名
+   *            password:
+   *              type: string
+   *              description: 密码
+   *            create_time:
+   *              type: string
+   *              description: 创建时间
+   *      responses:
+   *        200:
+   *          description: successful operation
+   * */
   .post('/register', async (ctx) => {
     const form = ctx.request.body;
     if (!form.name || !form.password) {
