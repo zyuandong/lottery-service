@@ -1,0 +1,73 @@
+{
+  "info": {
+    "title": "lottery-service API",
+    "version": "v0.0.1"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "swagger": "2.0",
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": ["User"],
+        "summary": "注册用户",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "新增管理员信息",
+            "schema": {
+              "type": "object",
+              "required": ["id", "name", "password"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "用户名"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "密码"
+                },
+                "create_time": {
+                  "type": "string",
+                  "description": "创建时间"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["User"],
+        "summary": "获取用户列表",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "default": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "default": 10
+          }
+        ]
+      }
+    },
+    "/login": {}
+  },
+  "definitions": {},
+  "responses": {},
+  "parameters": {},
+  "securityDefinitions": {},
+  "tags": []
+}

@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   debug: ^4.1.1
   identicon.js: ^2.3.3
+  js-yaml: ^4.1.0
   koa: ^2.7.0
   koa-body: ^4.2.0
   koa-convert: ^1.2.0
@@ -24,6 +25,7 @@ specifiers:
 dependencies:
   debug: 4.3.4
   identicon.js: 2.3.3
+  js-yaml: 4.1.0
   koa: 2.13.4
   koa-body: 4.2.0
   koa-convert: 1.2.0
