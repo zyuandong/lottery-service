@@ -10,6 +10,7 @@ const tools = require('../utils/tools');
 router.prefix('/users');
 
 router
+  // #region
   /**
    * @swagger
    * /users/register:
@@ -20,7 +21,7 @@ router
    *      consumes:
    *        - application/json
    *      parameters:
-   *      - name: system_manager
+   *      - name: body
    *        in: body
    *        description: 新增管理员信息
    *        schema:
@@ -43,6 +44,7 @@ router
    *        200:
    *          description: successful operation
    * */
+  // #endregion
   .post('/register', async (ctx) => {
     const form = ctx.request.body;
     if (!form.name || !form.password) {
@@ -105,6 +107,26 @@ router
     const data = await sql.queryByFields('user', { name, password });
     ctx.body = data;
   })
+  // #region
+  /**
+   * @swagger
+   * /users:
+   *   get:
+   *     tags:
+   *     - User
+   *     summary: 获取用户列表
+   *     consumes:
+   *       - application/json
+   *     parameters:
+   *       - name: page
+   *         in: query
+   *         default: 1
+   *       - name: pageSize
+   *         in: query
+   *         default: 10
+   *
+   */
+  // #endregion
   .get('/', async (ctx) => {
     const data = await sql.queryAll('user', ctx.request.query, [
       { field: 'is_admin', type: 'desc' },
